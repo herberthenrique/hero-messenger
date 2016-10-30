@@ -5,5 +5,6 @@
     .message-box__header__name #{name}
   .message-box__messages#messages-container
   .message-box__input
-    input.message-box__input__content(type="text")
-    button.message-box__input__button#send-message Send
+    form#form-send-message
+      input.message-box__input__content#message-content(type="text")
+      button.message-box__input__button#send-message(type="submit") Send
