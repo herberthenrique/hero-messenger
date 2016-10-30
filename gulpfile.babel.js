@@ -1,5 +1,3 @@
-
-
 import gulp from 'gulp';
 import util from 'gulp-util';
 import plumber from 'gulp-plumber';
@@ -16,8 +14,6 @@ import postcss from 'gulp-postcss';
 import concat from 'gulp-concat';
 import uglify from 'gulp-uglify';
 import pug from 'gulp-pug';
-import data from 'gulp-data';
-import yaml from 'js-yaml';
 import imagemin from 'gulp-imagemin';
 import browserSync from 'browser-sync';
 import svgmin from 'gulp-svgmin';
@@ -37,11 +33,7 @@ const srcPaths = {
   templates: 'src/templates/**/*.pug',
   icons: 'src/svg/icons/*',
   svg: 'src/svg/',
-  img: 'src/img/**/*',
-  data: 'src/data/',
-  vendors: [
-
-  ],
+  img: 'src/img/**/*'
 };
 
 const buildPaths = {
@@ -51,11 +43,9 @@ const buildPaths = {
   html: 'build/',
   img: 'build/img',
   svg: 'build/svg',
-  templates: 'build/templates',
-  vendors: 'src/js/_core/',
+  templates: 'build/templates'
 };
 
-const dataJson = {};
 const files = [];
 
 function onError(err) {
@@ -79,16 +69,6 @@ gulp.task('css', () => {
       compress: false,
     }))
     .on('error', onError)
-    .pipe(postcss([
-      mdcss({
-        // logo: '',
-        destination: 'build/styleguide',
-        title: 'Styleguide',
-        examples: {
-          css: ['../css/style.css'],
-        },
-      }),
-    ]))
     .on('error', onError)
     .pipe(gcmq())
     .pipe(cssnano())
@@ -96,17 +76,9 @@ gulp.task('css', () => {
 });
 
 gulp.task('templates', () =>
-   gulp.src(srcPaths.templates)
-    .pipe(gulp.dest(buildPaths.templates))
+  gulp.src(srcPaths.templates)
+  .pipe(gulp.dest(buildPaths.templates))
 );
-
-gulp.task('vendors', () => {
-  gulp.src(srcPaths.vendors)
-    .pipe(plumber())
-    .pipe(concat('vendors.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest(buildPaths.vendors));
-});
 
 gulp.task('js', (callback) => {
   webpack(webpackConfig, (err, stats) => {
@@ -124,21 +96,9 @@ gulp.task('js', (callback) => {
   });
 });
 
-gulp.task('read:data', () => {
-  fs.readdir(srcPaths.data, (err, items) => {
-    for (var i = 0; i < items.length; i++) {
-      files.push(items[i].split('.')[0]);
-    }
-    for (var i = 0; i < files.length; i++) {
-      dataJson[files[i]] = yaml.safeLoad(fs.readFileSync(`${srcPaths.data}/${files[i]}.yml`, 'utf-8'));
-    }
-  });
-});
-
 gulp.task('html', () => {
   gulp.src(srcPaths.html)
     .pipe(plumber())
-    .pipe(data(dataJson))
     .pipe(pug())
     .on('error', onError)
     .pipe(gulp.dest(buildPaths.html));
@@ -181,7 +141,6 @@ gulp.task('icons', () => {
 
 gulp.task('watch', () => {
   gulp.watch(srcPaths.html, { debounceDelay: 300 }, ['html']);
-  gulp.watch(`${srcPaths.data}**/*`, { debounceDelay: 300 }, ['read:data', 'html']);
   gulp.watch(srcPaths.css, ['css']);
   gulp.watch(srcPaths.js, ['js']);
   gulp.watch(srcPaths.img, ['images']);
@@ -204,9 +163,7 @@ gulp.task('browser-sync', () => {
 gulp.task('build', [
   'templates',
   'css',
-  'read:data',
   'html',
-  'vendors',
   'js',
   'images',
   'svg',

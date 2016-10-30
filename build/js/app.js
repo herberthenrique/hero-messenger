@@ -64,7 +64,11 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global document */
+	// eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
+
+	// eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
+
 
 	var _message = __webpack_require__(2);
 
@@ -113,29 +117,16 @@
 
 	    // }
 
-	  }, {
-	    key: 'addtoPage',
-	    value: function addtoPage(formattedMessage) {
-	      helper.appendHtmlWithTemplate(_message2.default, 'messages-container', formattedMessage);
-	    }
-	  }, {
-	    key: 'appendHtmlWithTemplate',
-	    value: function appendHtmlWithTemplate(template, parent, data) {
-	      var html = template(data);
-	      var div = document.createElement('div');
-	      div.innerHTML = html;
-	      document.getElementById(parent).appendChild(div);
-	    }
+	    // eslint-disable-next-line class-methods-use-this
+
 	  }, {
 	    key: 'addList',
 	    value: function addList(messages) {
-	      var _this = this;
-
 	      var formattedMessages = messages.map(function (message) {
 	        return messageHelper.formatMessage(message);
 	      });
 	      formattedMessages.forEach(function (formattedMessage) {
-	        return _this.addtoPage(formattedMessage);
+	        return helper.appendHtmlWithTemplate(_message2.default, 'messages-container', formattedMessage);
 	      });
 	    }
 	  }]);
@@ -540,7 +531,7 @@
 	  var formattedMessage = message;
 	  formattedMessage.formattedTime = time.calendar();
 	  return formattedMessage;
-	}
+	} /* eslint-disable import/prefer-default-export */
 
 /***/ },
 /* 9 */
@@ -14965,6 +14956,9 @@
 	  value: true
 	});
 	exports.appendHtmlWithTemplate = appendHtmlWithTemplate;
+	/* global document */
+	/* eslint-disable import/prefer-default-export */
+
 	function appendHtmlWithTemplate(template, parent, data) {
 	  var html = template(data);
 	  var div = document.createElement('div');
